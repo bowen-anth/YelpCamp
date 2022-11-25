@@ -24,8 +24,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
-// const { MongoStore } = require('connect-mongo');
-const MongoDBStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 
 mongoose.connect(dbUrl, {
     // useNewUrlParser: true,
@@ -53,7 +52,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize({
     replaceWith: '_'
 }));
-app.use(helmet({ contentSecurityPolicy: false }));
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
@@ -61,7 +59,8 @@ const scriptSrcUrls = [
     "https://api.mapbox.com/",
     "https://kit.fontawesome.com/",
     "https://cdnjs.cloudflare.com/",
-    "https://cdn.jsdelivr.net",
+    "https://cdn.jsdelivr.net/",
+    "https://res.cloudinary.com/dv5vm4sqh/"
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -70,39 +69,46 @@ const styleSrcUrls = [
     "https://api.tiles.mapbox.com/",
     "https://fonts.googleapis.com/",
     "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net/",
+    "https://res.cloudinary.com/dv5vm4sqh/"
 ];
 const connectSrcUrls = [
-    "https://api.mapbox.com/",
-    "https://a.tiles.mapbox.com/",
-    "https://b.tiles.mapbox.com/",
-    "https://events.mapbox.com/",
+    "https://*.tiles.mapbox.com",
+    "https://api.mapbox.com",
+    "https://events.mapbox.com",
+    "https://res.cloudinary.com/dv5vm4sqh/"
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = [ "https://res.cloudinary.com/dv5vm4sqh/" ];
+ 
 app.use(
     helmet.contentSecurityPolicy({
-        directives: {
-            defaultSrc: [],
-            connectSrc: ["'self'", ...connectSrcUrls],
-            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-            workerSrc: ["'self'", "blob:"],
-            objectSrc: [],
-            imgSrc: [
+        directives : {
+            defaultSrc : [],
+            connectSrc : [ "'self'", ...connectSrcUrls ],
+            scriptSrc  : [ "'unsafe-inline'", "'self'", ...scriptSrcUrls ],
+            styleSrc   : [ "'self'", "'unsafe-inline'", ...styleSrcUrls ],
+            workerSrc  : [ "'self'", "blob:" ],
+            objectSrc  : [],
+            imgSrc     : [
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/guitarizt/",
-                "https://images.unsplash.com/",
+                "https://res.cloudinary.com/dcy9cadvp/",
+                "https://images.unsplash.com/"
             ],
-            fontSrc: ["'self'", ...fontSrcUrls],
-        },
+            fontSrc    : [ "'self'", ...fontSrcUrls ],
+            mediaSrc   : [ "https://res.cloudinary.com/dv5vm4sqh/" ],
+            childSrc   : [ "blob:" ]
+        }
     })
 );
 
-const store = new MongoDBStore ({
-    url: dbUrl,
-    secret: 'thisshouldbeabettersecret!',
-    touchAfter: 24 * 60 * 60
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
 });
 
 store.on('error', function (e) {
@@ -110,8 +116,8 @@ store.on('error', function (e) {
 })
 
 const sessionConfig = {
+    store,
     name: 'session',
-    // store,
     secret: 'thisshouldbeabettersecret',
     resave: false,
     saveUninitialized: true,
