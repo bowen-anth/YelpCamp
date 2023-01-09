@@ -12,8 +12,6 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp')
         console.log(err)
     })
 
-
-
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
