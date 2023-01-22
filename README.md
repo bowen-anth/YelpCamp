@@ -1,7 +1,5 @@
 # YelpCamp
 
-![yelpcamp](https://github.com/bowen-anth/YelpCamp/blob/main/yelpcamp.jpeg?raw=true | width=900)  
-
 <img src="https://github.com/bowen-anth/YelpCamp/blob/main/yelpcamp.jpeg?raw=true" width="900">
 
 YelpCamp is a website where users can create and review campgrounds. In order to review or create a campground, you must have an account. You must be logged in to review or create a campground. You can use the dummy account below:
