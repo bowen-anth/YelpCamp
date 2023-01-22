@@ -4,8 +4,8 @@
 
 YelpCamp is a website where users can create and review campgrounds. In order to review or create a campground, you must have an account. You must be logged in to review or create a campground. You can use the dummy account below:
 
-user: guest
-password: guest
+```user: guest
+password: guest```
 
 This project was created using Node.js, Express, MongoDB, and Bootstrap. Passport.js was used to handle authentication. This project was part of Colt Steele's 'The Web Developer Bootcamp 2023' course on Udemy.  
 
