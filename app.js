@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+// if (process.env.NODE_ENV !== "production") {
+//     require('dotenv').config();
+// }
 
 require('dotenv').config();
 
@@ -18,7 +18,7 @@ const Review = require('./models/review');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+const dbUrl = 'mongodb://localhost:27017/yelp-camp'; //process.env.DB_URL ||
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require('./routes/users');
